@@ -10,7 +10,6 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 // import Home from './pages/Home.jsx'
 // import Characters from './pages/Characters.jsx'
 import Layout from './components/Layout.jsx';
-const Register = lazy(() => import('./pages/auth/Register.jsx'))
 
 const Home = lazy(() => import('./pages/Home.jsx'))
 const Characters = lazy(() => import('./pages/Characters.jsx'))
@@ -25,6 +24,7 @@ const AdminLayout = lazy(() => import('./components/admin/AdminLayout.jsx'))
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard.jsx'))
 const AdminCharacters = lazy(() => import('./pages/admin/characters/Characters.jsx'))
 const AdminUsers = lazy(() => import('./pages/admin/users/Users.jsx'))
+const Register = lazy(() => import('./pages/auth/Register.jsx'))
 
 
 const router = createBrowserRouter([

@@ -1,50 +1,48 @@
 import React, { useEffect, useState } from 'react'
-//falta crear useApiUsers
-// import { useApiUsers } from '../../../services/user.service'
+import { useApiUsers } from '../../../services/users.service.js'
 import { Link } from 'react-router'
 import ItemLoadingSpinner from '../../../components/ItemLoadingSpinner'
 import ErrorWithIcon from "../../../components/ErrorWithIcon"
+import ConfirmModal from '../../../components/ConfirmModal.jsx'
+import TituloH1 from '../../../components/TituloH1.jsx'
+import { useNavigate } from 'react-router'
 
-const testUsers = [
-  {
-    _id: '1',
-    username: 'testuser1',
-    email: 'testuser1@example.com',
-    role: 'User',
-    createdAt: '2024-06-01'
-  },
-  {
-    _id: '2',
-    username: 'testuser2',
-    email: 'testuser2@example.com',
-    role: 'Admin',
-    createdAt: '2024-06-02'
-  }
-]
 
 export default function Users() {
-  const [usuarios, setUsuarios] = useState(testUsers)
-  const [estado, setEstado] = useState('READY') // <<<<< CAMBIAR A LOADING PARA CUANDO FUNCIONE
-  const roles = ['Admin', 'User']
-  // const { getCharacters } = useApiCharacters();
+  const [usuarios, setUsuarios] = useState([])
+  const [estado, setEstado] = useState('LOADING') 
+  const roles = [
+  { value: "user", label: "User" },
+  { value: "admin", label: "Admin" },
+]
+  const { getUsers, deleteUser } = useApiUsers();
+  const navigate = useNavigate()
+
+const [aEliminar, setAEliminar] = useState(null) 
+
+const onDelete = (id) => {
+  deleteUser(id)
+    .then(() => {
+      setUsuarios(usuarios.filter((u) => u._id !== id))
+      setAEliminar(null)//cierra modal                            
+    })
+    .catch(() => console.error("No se pudo eliminar el usuario"))
+}
+
+// const onFilter = (f) => {
+//   console.log('Filtrar por: ' , f);
+// }
   
-    const fetchApi = async () => {
-      setEstado("LOADING");
-      const { getUsers } = useApiUsers();
-      try {
-        const data = await getUsers();
-        setUsuarios(data);
-        console.log(data);
-        
-        setEstado("READY");
-      } catch (error) {
-        setEstado("ERROR");
-      }
-    };
-   // DESCOMENTAR PARA TRAER USUARIOS
-    // useEffect(() => {
-    //   fetchApi();
-    // }, []);
+    useEffect(() => {
+      getUsers()
+        .then((data) => {
+          setUsuarios(data)
+          setEstado("READY")
+          // console.log('Usuarios traidos: ' , data);
+          
+        })
+        .catch(() => setEstado("ERROR"))
+    }, [])
 
     if (estado === "LOADING") {
       return <ItemLoadingSpinner />;
@@ -55,7 +53,9 @@ export default function Users() {
 
   return (
     <div>
-      {/* {characters} */}
+      <button className='btn btn-secondary'onClick={() => navigate(-1)}>Volver</button>
+      <TituloH1 titulo='Usuarios'/>
+      {/* <button className='btn btn-primary m-4' onClick={ () => onFilter('filtro')} >Ver Eliminados</button> */}
       <table className="table table-striped table-hover">
   <thead>
     <tr>
@@ -70,27 +70,40 @@ export default function Users() {
   <tbody>
 
       {
-      usuarios.map( (c) => {
+      usuarios.map( (user) => {
          return (
-          <tr key={c._id}>
-            <th scope="row">{c._id}</th>
-            <td>{c.username}</td>
-            <td>{c.email}</td>
+          <tr key={user._id}>
+            <th scope="row">{user._id}</th>
+            <td>{user.username}</td>
+            <td>{user.email}</td>
             <td>
-              <select className="form-select" defaultValue={c.role ? c.role : 'User'}>
-                {roles.map((role) => (
-                  <option key={role} value={role}>{role}</option>
-                ))}
+              <select className="form-select" defaultValue={user.rol ?? "user"}>
+                {roles.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
               </select>
             </td>
-            <td>{c.createdAt}</td>
+            <td>{new Date(user.createdAt)
+                .toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric"
+                  })}
+            </td>
             <td>
-              <Link to={`/usuarios/${c._id}/editar`} className="btn btn-primary me-2">Editar</Link>
-              <Link to={`/usuarios/${c._id}/eliminar`} className="btn btn-danger">Eliminar</Link>
+              {/* <Link to={`/usuarios/${c._id}/editar`} className="btn btn-primary me-2">Editar</Link> */}
+              <button onClick={() => setAEliminar(user)} className="btn btn-danger">Eliminar</button>
+            <ConfirmModal
+              show={aEliminar !== null}
+              title="Eliminar usuario"
+              message={`¿Seguro que querés eliminar a ${aEliminar?.username}?`}
+              confirmText="Eliminar"
+              onConfirm={() => onDelete(aEliminar._id)}
+              onCancel={() => setAEliminar(null)}
+            />
             </td>
           </tr>
          )
-      })
+         
+        })
       }
   </tbody>
 </table>

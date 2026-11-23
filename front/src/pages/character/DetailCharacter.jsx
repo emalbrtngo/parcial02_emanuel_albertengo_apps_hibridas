@@ -6,6 +6,9 @@ import ItemLoadingSpinner from '../../components/ItemLoadingSpinner.jsx'
 import ErrorWithIcon from '../../components/ErrorWithIcon.jsx'
 import CommentForm from '../../components/comments/CommentForm.jsx'
 import CommentList from '../../components/comments/CommentList.jsx'
+const { deleteCharacterComment, submitComment } = useApiCharacters()
+
+const user = { _id: '6b0300a33b8006c52ccabd0d'}
 
 const HOUSE_COLORS = {
   Gryffindor: "#740001",
@@ -21,12 +24,14 @@ export default function DetailCharacter() {
   const navigate = useNavigate()
   const [estado, setEstado] = useState('LOADING')
   const [character, setCharacter] = useState(null)
+  // const [comments, setComments] = useState([])
   const { getCharacterById } = useApiCharacters()
 
   useEffect(() => {
     getCharacterById(id)
       .then((data) => {
         setCharacter(data)
+        // setComments(data.comments)
         setEstado('READY')
       })
       .catch(() => setEstado('ERROR'))
@@ -45,6 +50,24 @@ export default function DetailCharacter() {
     { label: "Ascendencia", value: character.ancestry },
     { label: "Patronus", value: character.patronus },
   ]
+
+  const handleDeleteComment = (idComment) => {
+  deleteCharacterComment(idComment)
+    .then(() => {
+      setCharacter({
+        ...character, comments: character.comments.filter(c => c._idComment !== idComment),
+      })
+    })
+    .catch(() => console.error("No se pudo eliminar el comentario"))
+}
+
+  const handleSubmitComment = (characterId , comment) => {
+    submitComment(characterId, comment)
+    .then((personajeActualizado) => {
+      setCharacter(personajeActualizado)
+    })
+    .catch(() => console.error("No se pudo comentar"))
+  }
 
   return (
     <div className="container py-4" style={{ maxWidth: "900px" }}>
@@ -96,8 +119,8 @@ export default function DetailCharacter() {
         <h2 className="h4 mb-3">
           Comentarios <span className="badge text-bg-secondary">{character.comments?.length || 0}</span>
         </h2>
-        <CommentForm />
-        <CommentList comments={character.comments} />
+        <CommentForm characterId={character._id} onSubmitComment = {handleSubmitComment}/>
+        <CommentList comments={character.comments} onDelete={handleDeleteComment} />
       </section>
     </div>
   )

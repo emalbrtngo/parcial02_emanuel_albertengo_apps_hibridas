@@ -46,6 +46,11 @@ export default function NavBar() {
                 }
               </li>
               <li className="nav-item">
+                {!user && 
+                  <Link className="nav-link" to="/register"> Registrarse </Link>
+                }
+              </li>
+              <li className="nav-item">
                 {user && 
                   <Link className="nav-link" to="/miperfil"> Mi Perfil </Link>
                 }

@@ -6,12 +6,16 @@ export function useApiCharacters() {
     function createCharacter(data) { return call("/personajes", "POST", data) }
     function updateCharacter(id, data) { return call(`/personajes/${id}`, "PUT", data) }
     function deleteCharacter(id) { return call(`/personajes/${id}`, "DELETE") }
+    function deleteCharacterComment(id) {return call(`/personajes/comentarios/${id}`, "DELETE")}
+    function submitComment(id, data) {return call(`/personajes/${id}/comentarios` , "POST", data)}
 
     return {
         getCharacters,
         getCharacterById,
         createCharacter,
         updateCharacter,
-        deleteCharacter
+        deleteCharacter,
+        deleteCharacterComment,
+        submitComment
     }
 }

@@ -1,10 +1,13 @@
-import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as userSchemas from '../../schemas/users'
+import { useApiUsers } from "../../services/users.service";
+import ErrorWithIcon from "../../components/ErrorWithIcon"
 
 export default function Login() {
+  const { login } = useApiUsers()
   const navigate = useNavigate();
   const {
     register,
@@ -13,12 +16,18 @@ export default function Login() {
   } = useForm(
     {resolver: zodResolver(userSchemas.userLoginSchema)}
   )
+  const [error, setError] = useState("")
 
-  const onSubmit = (data) => {
-    console.log(data);
-    
-
-  };
+const onSubmit = async (data) => {
+  try {
+    const userLogueado = await login(data)
+    console.log(userLogueado)
+    localStorage.setItem("user", JSON.stringify(userLogueado))
+    navigate("/")
+  } catch {
+    setError("Usuario o contraseña incorrectos")
+  }
+}
 
   return (
     <div className="row justify-content-center mt-5">
@@ -44,6 +53,7 @@ export default function Login() {
               </span>
             </p>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                {error && <ErrorWithIcon message={error} />}
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">
                   Correo electrónico

@@ -1,12 +1,16 @@
+// TODO: FALTA AGREGAR FILTROS: BUSQUEDA, CUSTOM, POR USUARIO
 import React, { useEffect, useState } from 'react'
 import { useApiCharacters } from '../../../services/character.service'
 import { Link } from 'react-router'
 import ItemLoadingSpinner from '../../../components/ItemLoadingSpinner'
 import ErrorWithIcon from "../../../components/ErrorWithIcon"
+import TituloH1 from '../../../components/TituloH1'
+import { useNavigate } from 'react-router'
 
 export default function Characters() {
   const [characters, setCharacters] = useState([])
   const [estado, setEstado] = useState('LOADING')
+  const navigate = useNavigate()
   // const { getCharacters } = useApiCharacters();
   
     const fetchApi = async () => {
@@ -15,7 +19,7 @@ export default function Characters() {
       try {
         const data = await getCharacters();
         setCharacters(data);
-        console.log(data);
+        // console.log(data);
         
         setEstado("READY");
       } catch (error) {
@@ -37,6 +41,8 @@ export default function Characters() {
   return (
     <div>
       {/* {characters} */}
+      <button className='btn btn-secondary'onClick={() => navigate(-1)}>Volver</button>
+      <TituloH1 titulo={'Personajes'}/>
       <table className="table table-striped table-hover">
   <thead>
     <tr>

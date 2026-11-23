@@ -5,7 +5,9 @@ import { commentsSchema } from '../../schemas/comments'
 
 const MAX_LENGTH = 500
 
-export default function CommentForm() {
+const user = { username: "admin", _id: "6b0300a33b8006c52ccabd0d"}
+
+export default function CommentForm( {characterId, onSubmitComment} ) {
   const {
     register,
     handleSubmit,
@@ -17,8 +19,10 @@ export default function CommentForm() {
   const content = watch('content') ?? ""
 
   const onSubmit = (data) => {
-    console.log("Comentario es: ", data)
-    reset()         
+    const comentario = { _id: user._id, content: data.content }
+    console.log("Comentario es: ", comentario)
+    onSubmitComment(characterId, comentario)
+    reset()      
   }
 
   return (
