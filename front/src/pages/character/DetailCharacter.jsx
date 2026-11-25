@@ -1,14 +1,15 @@
-// pages/characters/DetailCharacter.jsx
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router'
+import { useParams, useNavigate, Link } from 'react-router'
 import { useApiCharacters } from '../../services/character.service.js'
 import ItemLoadingSpinner from '../../components/ItemLoadingSpinner.jsx'
 import ErrorWithIcon from '../../components/ErrorWithIcon.jsx'
 import CommentForm from '../../components/comments/CommentForm.jsx'
 import CommentList from '../../components/comments/CommentList.jsx'
 const { deleteCharacterComment, submitComment } = useApiCharacters()
+import { toast } from 'sonner'
 
-const user = { _id: '6b0300a33b8006c52ccabd0d'}
+const user = JSON.parse(localStorage.getItem('user') || 'null')
+
 
 const HOUSE_COLORS = {
   Gryffindor: "#740001",
@@ -55,8 +56,9 @@ export default function DetailCharacter() {
   deleteCharacterComment(idComment)
     .then(() => {
       setCharacter({
-        ...character, comments: character.comments.filter(c => c._idComment !== idComment),
+        ...character, comments: character.comments.filter(c => c._idComment !== idComment)
       })
+      toast.warning('Comentario eliminado')
     })
     .catch(() => console.error("No se pudo eliminar el comentario"))
 }
@@ -119,7 +121,10 @@ export default function DetailCharacter() {
         <h2 className="h4 mb-3">
           Comentarios <span className="badge text-bg-secondary">{character.comments?.length || 0}</span>
         </h2>
+        {user &&
         <CommentForm characterId={character._id} onSubmitComment = {handleSubmitComment}/>
+        }
+        {!user && <Link className='link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover' to="/login">Iniciar sesión para dejar un comentario</Link> }
         <CommentList comments={character.comments} onDelete={handleDeleteComment} />
       </section>
     </div>

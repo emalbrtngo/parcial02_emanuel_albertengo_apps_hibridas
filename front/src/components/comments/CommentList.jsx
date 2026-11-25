@@ -1,4 +1,10 @@
+import { useSession } from "../../context/session.context"
+
 export default function CommentList({ comments = [], onDelete }) {
+  const { user } = useSession()
+  const esAdmin = user?.rol === "admin"
+  // console.log(comments);
+  
   if (comments.length === 0) {
     return (
       <div className="text-center text-body-secondary py-4">
@@ -16,12 +22,12 @@ export default function CommentList({ comments = [], onDelete }) {
             className="rounded-circle bg-primary-subtle text-primary-emphasis fw-bold d-flex align-items-center justify-content-center flex-shrink-0"
             style={{ width: "40px", height: "40px" }}
           >
-            {comment.user?.name?.charAt(0).toUpperCase() || "?"}
+            {comment.username?.charAt(0).toUpperCase() || "?"}
           </div>
 
           <div className="bg-body-tertiary rounded-3 px-3 py-2 flex-grow-1">
             <div className="d-flex justify-content-between align-items-center">
-              <strong className="small">{comment._id || "Usuario inexistente"}</strong>
+              <strong className="small">{comment.username || "Usuario inexistente"}</strong>
               {comment.date && (
                 <small className="text-body-secondary">
                   {new Date(comment.date).toLocaleDateString("es-AR")}
@@ -29,12 +35,15 @@ export default function CommentList({ comments = [], onDelete }) {
               )}
             </div>
             <p className="mb-0 mt-1">{comment.content}</p>
-            {/* solucionar tema botones */}
+            { (user?._id === comment._id || esAdmin) &&  
+            
             <button
               className="btn btn-sm btn-outline-danger"
               onClick={() => onDelete(comment._idComment)}
               >Eliminar
             </button>
+            }
+
             {/* <button>Editar</button> */}
           </div>
         </li>

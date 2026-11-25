@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as userSchemas from '../../schemas/users'
 import { useApiUsers } from "../../services/users.service";
 import ErrorWithIcon from "../../components/ErrorWithIcon"
+import { useSession } from "../../context/session.context";
 
 export default function Login() {
-  const { login } = useApiUsers()
+  const { login: loginApi } = useApiUsers()
   const navigate = useNavigate();
   const {
     register,
@@ -16,13 +17,14 @@ export default function Login() {
   } = useForm(
     {resolver: zodResolver(userSchemas.userLoginSchema)}
   )
-  const [error, setError] = useState("")
+  const [error, setError] = useState('')
+  const auth = useSession()
 
 const onSubmit = async (data) => {
   try {
-    const userLogueado = await login(data)
-    console.log(userLogueado)
-    localStorage.setItem("user", JSON.stringify(userLogueado))
+    const userLogueado = await loginApi(data)
+
+    auth.login(userLogueado)// guardo login en el context
     navigate("/")
   } catch {
     setError("Usuario o contraseña incorrectos")

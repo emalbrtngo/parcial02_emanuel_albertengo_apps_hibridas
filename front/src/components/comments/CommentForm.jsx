@@ -5,7 +5,7 @@ import { commentsSchema } from '../../schemas/comments'
 
 const MAX_LENGTH = 500
 
-const user = { username: "admin", _id: "6b0300a33b8006c52ccabd0d"}
+// const user = JSON.parse(localStorage.getItem('user') || 'null');
 
 export default function CommentForm( {characterId, onSubmitComment} ) {
   const {
@@ -19,10 +19,9 @@ export default function CommentForm( {characterId, onSubmitComment} ) {
   const content = watch('content') ?? ""
 
   const onSubmit = (data) => {
-    const comentario = { _id: user._id, content: data.content }
-    console.log("Comentario es: ", comentario)
-    onSubmitComment(characterId, comentario)
-    reset()      
+    onSubmitComment(characterId, { content: data.content })
+    reset()
+    // console.log("Comentario es: ", comentario)    
   }
 
   return (

@@ -1,6 +1,7 @@
 import React from 'react'
 import NavBar from './NavBar'
 import { Outlet } from 'react-router'
+import { Toaster } from 'sonner';
 
 export default function Layout() {
   return (
@@ -8,6 +9,7 @@ export default function Layout() {
         <header className="mb-4">
             <NavBar />
             <Outlet />
+            <Toaster richColors/>
         </header>
     </div>
   )

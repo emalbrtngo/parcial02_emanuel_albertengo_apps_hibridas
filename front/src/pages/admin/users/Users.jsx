@@ -15,15 +15,24 @@ export default function Users() {
   { value: "user", label: "User" },
   { value: "admin", label: "Admin" },
 ]
-  const { getUsers, deleteUser } = useApiUsers();
+  const { getUsers, deleteUser, changeRol } = useApiUsers();
   const navigate = useNavigate()
 
-const [aEliminar, setAEliminar] = useState(null) 
+const [aEliminar, setAEliminar] = useState(null)
+
+const onChangeRol = (id, nuevoRol) => {
+  changeRol(id, nuevoRol)
+    .then(() => setUsuarios(usuarios.map((user) => user._id === id ? { ...user, rol: nuevoRol } : user)))
+    .catch(() => console.error('Error al cambiar el rol'))
+
+    console.log('Nuevo rol asignado a ', id, ', nuevo rol ', nuevoRol);
+    
+}
 
 const onDelete = (id) => {
   deleteUser(id)
     .then(() => {
-      setUsuarios(usuarios.filter((u) => u._id !== id))
+      setUsuarios(usuarios.filter((user) => user._id !== id))
       setAEliminar(null)//cierra modal                            
     })
     .catch(() => console.error("No se pudo eliminar el usuario"))
@@ -71,13 +80,17 @@ const onDelete = (id) => {
 
       {
       usuarios.map( (user) => {
-         return (
+        return (
           <tr key={user._id}>
             <th scope="row">{user._id}</th>
             <td>{user.username}</td>
             <td>{user.email}</td>
             <td>
-              <select className="form-select" defaultValue={user.rol ?? "user"}>
+              <select
+                className="form-select form-select-sm"
+                value={user.rol ?? 'user'}
+                onChange={(e) => onChangeRol(user._id, e.target.value)}
+              >
                 {roles.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
               </select>
             </td>
@@ -101,8 +114,7 @@ const onDelete = (id) => {
             />
             </td>
           </tr>
-         )
-         
+        )
         })
       }
   </tbody>

@@ -5,6 +5,7 @@ import ErrorWithIcon from "../../components/ErrorWithIcon";
 import { useForm } from "react-hook-form";
 import { charactersSchema } from "../../schemas/characters";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from 'sonner';
 
 export default function NewCharacter() {
   const navigate = useNavigate();
@@ -20,9 +21,16 @@ export default function NewCharacter() {
 
   const onSubmit = (data) => {
     // el onsubmit ya rebie todos los campos VALIDADOS Y LISTOS INCREIBLE
+    console.log('Enviando: ', data);
+    
     return createCharacter(data)
-    .then(() => navigate(-1))
-    .catch(() => setError(true))
+    .then((personaje) =>
+      toast.success(`Tu personaje ${personaje.name} fué creado con éxito`),
+      navigate(-1))
+    .catch(() => {
+      setError(true)
+      toast.error(`Parece que hubo un error, por favor volvé a intentar`)
+    })
     // console.log(formData);
   };
 
@@ -255,7 +263,7 @@ export default function NewCharacter() {
                 className="form-control"
                 id="wandLength"
                 {...register("wand.length", { valueAsNumber: true })}
-              />
+              /> <span>centímetros</span>
               {errors.wand?.length && (
                 <p className="text-danger">{errors.wand.length.message}</p>
               )}

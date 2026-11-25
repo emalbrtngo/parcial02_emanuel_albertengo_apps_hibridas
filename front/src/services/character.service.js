@@ -1,7 +1,10 @@
 import { call } from './api.service.jsx'
 
 export function useApiCharacters() {
-    function getCharacters() { return call("/personajes") }
+    function getCharacters(filtros = {}) {
+        const params = new URLSearchParams(filtros).toString()
+        return call(`/personajes${params ? `?${params}` : ""}`)
+}
     function getCharacterById(id) { return call(`/personajes/${id}`) }
     function createCharacter(data) { return call("/personajes", "POST", data) }
     function updateCharacter(id, data) { return call(`/personajes/${id}`, "PUT", data) }

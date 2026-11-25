@@ -7,6 +7,7 @@ import { useApiCharacters } from "../../services/character.service.js";
 import { charactersSchema } from "../../schemas/characters";
 import ItemLoadingSpinner from "../../components/ItemLoadingSpinner.jsx";
 import ErrorWithIcon from "../../components/ErrorWithIcon.jsx";
+import { toast } from 'sonner';
 
 function toFormValues(data) {
   return {
@@ -62,7 +63,10 @@ export default function EditCharacter() {
     setError(false);
     console.log("Datos que se envían:", data)
     return updateCharacter(id, data)
-      .then(() => navigate(-1))
+      .then((personaje) => {
+        navigate(-1),
+        toast.success(`Tu personaje ${personaje.name} fué editado correctamente`)
+      })
       .catch(() => setError(true));
   };
 

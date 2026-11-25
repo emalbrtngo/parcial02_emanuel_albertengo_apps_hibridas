@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router'
 import { useApiCharacters } from '../../services/character.service.js'
 import ItemLoadingSpinner from '../../components/ItemLoadingSpinner.jsx'
 import ErrorWithIcon from '../../components/ErrorWithIcon.jsx'
+import { toast } from 'sonner'
 
 export default function DeleteCharacter() {
   const { id } = useParams()
@@ -23,7 +24,8 @@ export default function DeleteCharacter() {
   const handleDelete = (e) => {
     e.preventDefault()
     deleteCharacter(id)
-      .then(() => navigate(-1))
+      .then(() => 
+        navigate(-1),     )
       .catch(() => console.error("No se pudo eliminar el personaje"))
   }
 

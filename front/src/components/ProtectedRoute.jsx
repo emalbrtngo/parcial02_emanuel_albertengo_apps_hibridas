@@ -1,5 +1,6 @@
 import React from 'react'
 import { Navigate } from 'react-router'
+import { useSession } from '../context/session.context'
 /*
 Éste componente permite o restringe el acceso si el usuario está o no logeado.
 Se aplica a rutas que quiero que el user esté logeado
@@ -19,7 +20,7 @@ SEGUIR VIENDO LA CLASE 1HORA 16MIN
 
 
 export default function ProtectedRoute({ element, rol }) {
-  const user = JSON.parse(localStorage.getItem("user"))
+  const { user } = useSession()
 
   if (!user) return <Navigate to="/login" />  //No está logueado al login
 

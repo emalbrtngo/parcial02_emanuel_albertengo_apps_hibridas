@@ -8,12 +8,15 @@ export function useApiUsers() {
     }
     function deleteUser(id) { return call(`/users/${id}`, 'DELETE')}
     function login(data) { return call(`/users/login`, 'POST', data)}
+    function changeRol(id, rol) { return call(`/users/${id}/rol`, 'PATCH', { rol }) }
 
 
     return { 
         registerUser,
         getUsers,
         deleteUser,
-        login
+        login,
+        changeRol
     }
 }
+

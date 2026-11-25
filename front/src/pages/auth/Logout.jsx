@@ -1,9 +1,13 @@
-import React from 'react'
+import { useEffect } from 'react'
+import { Navigate } from 'react-router'
+import { useSession } from '../../context/session.context.jsx'
 
 export default function Logout() {
-  return (
-    <div>
-      Cerrando sesión...
-    </div>
-  )
+  const auth = useSession()
+
+  useEffect(() => {
+    auth.logout()
+  }, [])
+
+  return <Navigate to="/login" />
 }

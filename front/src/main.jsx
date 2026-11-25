@@ -1,4 +1,4 @@
-import { StrictMode, lazy, Suspense } from 'react'
+import { StrictMode, lazy, Suspense} from 'react'
 import { createRoot } from 'react-dom/client'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.bundle.min.js"
@@ -10,6 +10,8 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 // import Home from './pages/Home.jsx'
 // import Characters from './pages/Characters.jsx'
 import Layout from './components/Layout.jsx';
+import Logout from './pages/auth/Logout.jsx'
+import { SessionProvider } from './context/session.context.jsx'
 
 const Home = lazy(() => import('./pages/Home.jsx'))
 const Characters = lazy(() => import('./pages/Characters.jsx'))
@@ -18,7 +20,6 @@ const EditCharacter = lazy(() => import('./pages/character/EditCharacter.jsx'))
 const DetailCharacter = lazy(() => import('./pages/character/DetailCharacter.jsx'))
 const DeleteCharacter = lazy(() => import('./pages/character/DeleteCharacter.jsx'))
 const Login = lazy(() => import('./pages/auth/Login.jsx'))
-const Profile = lazy(() => import('./pages/Profile.jsx'))
 const MyCollection = lazy(() => import('./pages/MyCollection.jsx'))
 const AdminLayout = lazy(() => import('./components/admin/AdminLayout.jsx'))
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard.jsx'))
@@ -42,15 +43,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/personajes/nuevo",
-        element: <Suspense fallback={<div>Revolviendo el caldero...</div>}><NewCharacter /></Suspense>,
+        element: <Suspense fallback={<div>Revolviendo el caldero...</div>}><ProtectedRoute element={ <NewCharacter/>} /></Suspense>,
       },
       {
         path: "/personajes/:id/editar",
-        element: <Suspense fallback={<div>Revolviendo el caldero...</div>}><EditCharacter /></Suspense>,
+        element: <Suspense fallback={<div>Revolviendo el caldero...</div>}><ProtectedRoute element={ <EditCharacter />} /></Suspense>,
       },
       {
         path: "/personajes/:id/eliminar",
-        element: <Suspense fallback={<div>Revolviendo el caldero...</div>}><DeleteCharacter /></Suspense>,
+        element: <Suspense fallback={<div>Revolviendo el caldero...</div>}><ProtectedRoute element={ <DeleteCharacter />} /></Suspense>,
       },
       {
         path: "/personajes/:id",
@@ -65,8 +66,8 @@ const router = createBrowserRouter([
         element: <Suspense fallback={<div>Revolviendo el caldero...</div>}><Register /></Suspense>,
       },
       {
-        path: "/miperfil",
-        element:  <Suspense fallback={<div>Revolviendo el caldero...</div>}><ProtectedRoute element={<Profile />} /></Suspense>,
+        path: "/logout",
+        element:  <Suspense fallback={<div>Revolviendo el caldero...</div>}><ProtectedRoute element={<Logout />} /></Suspense>,
       },
       {
         path: "/micolleccion",
@@ -114,8 +115,11 @@ const router = createBrowserRouter([
   }
 ]);
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <SessionProvider>
+      <RouterProvider router={router} />
+    </SessionProvider>
   </StrictMode>,
 )
