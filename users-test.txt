@@ -1,6 +1,0 @@
-Hola profe! te dejo un user de prueba con rol admin
-
-us: admin@mail.com
-pw: Em@123456
-
-Adjunto el .env aparte para el acceso a la bd
