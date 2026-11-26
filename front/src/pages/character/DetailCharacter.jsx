@@ -73,7 +73,7 @@ export default function DetailCharacter() {
 
   return (
     <div className="container py-4" style={{ maxWidth: "900px" }}>
-      <button onClick={() => navigate(-1)} className="btn btn-secondary px-0 mb-3">
+      <button onClick={() => navigate(-1)} className="btn btn-secondary p-2 mb-3 ">
         Volver
       </button>
 

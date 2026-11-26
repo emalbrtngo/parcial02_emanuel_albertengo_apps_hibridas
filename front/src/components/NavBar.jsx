@@ -9,15 +9,13 @@ export default function NavBar() {
   
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-secondary">
+      <nav className="navbar navbar-expand-lg bg-body-secondary container">
         <div className="container-fluid">
           <div className="d-flex flex-column">
             <Link className="navbar-brand" to="/">
               HPP
             </Link>
-            {user && rol() === 'admin' && (
-              <Link className="nav-link small" to="/admin">Admin Panel</Link>
-            )}
+            
           </div>
 
           <button
@@ -59,9 +57,12 @@ export default function NavBar() {
               )}
               {!user && (
                 <li className="nav-item">
-                  <Link className="nav-link" to="/register"> Registrarse </Link>
+                  <Link className="btn btn-outline-primary text-nowrap" to="/register"> Registrarse </Link>
                 </li>
               )}
+              {user && rol() === 'admin' && (
+              <Link className="btn brn-primary bg-primary text-white fw-bold " to="/admin">Admin Panel</Link>
+            )}
               {user && (
                 <li className="nav-item">
                   <Link className="nav-link" to="/logout"> Cerrar Sesión </Link>

@@ -1,0 +1,75 @@
+$clarito: #e4dfd4;
+$verde:     #539a6b;
+$azul:      #57679e;
+$rojo:      #bf1819;
+$dorado:    #f0c85d;
+
+$primary:   $azul;
+$success:   $verde;
+$danger:    $rojo;
+$warning:   $dorado;
+$secondary: #6b5d4b; 
+
+$body-bg:           $clarito;
+$body-secondary-bg: darken($clarito, 6%);   
+$body-tertiary-bg:  lighten($clarito, 4%);  
+$card-bg:           #fbf6ec;                  
+$body-color:        #2f2a24;                 
+
+
+$font-family-sans-serif: "Lato", system-ui, sans-serif;
+$headings-font-family:   "Cinzel", serif;
+$headings-font-weight:   700;
+
+$border-radius:    .6rem;
+$border-radius-lg: .9rem;
+$box-shadow-sm:    0 .2rem .6rem rgba(47, 42, 36, .12);
+
+@import "bootstrap/scss/bootstrap";
+
+.card {
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+textarea {
+    background-color: #f0f4f8; 
+    color: #333333; 
+}
+
+select {
+    background-color: #f0f4f8;
+    color: #333333;
+    padding: 8px 12px;
+    border: 1px solid #333333 !important;
+    border-radius: 4px;
+}
+
+select option {
+    background-color: #ffffff;
+    color: #333333;
+}
+
+select option:checked {
+    background-color: #3b82f6;
+    color: #ffffff;
+}
+
+select option:disabled {
+    background-color: #e2e8f0;
+    color: #94a3b8;
+}
+
+
+.navbar-brand {
+    font-family: $headings-font-family;
+    letter-spacing: .05em;
+    // background-image: url(../../public/images/logobg.png);
+    // background-position: cover;
+    // background-size: cover;
+    // width: 100px;
+}

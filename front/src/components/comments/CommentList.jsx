@@ -25,27 +25,28 @@ export default function CommentList({ comments = [], onDelete }) {
             {comment.username?.charAt(0).toUpperCase() || "?"}
           </div>
 
-          <div className="bg-body-tertiary rounded-3 px-3 py-2 flex-grow-1">
-            <div className="d-flex justify-content-between align-items-center">
-              <strong className="small">{comment.username || "Usuario inexistente"}</strong>
-              {comment.date && (
-                <small className="text-body-secondary">
-                  {new Date(comment.date).toLocaleDateString("es-AR")}
-                </small>
-              )}
-            </div>
-            <p className="mb-0 mt-1">{comment.content}</p>
-            { (user?._id === comment._id || esAdmin) &&  
-            
-            <button
-              className="btn btn-sm btn-outline-danger"
-              onClick={() => onDelete(comment._idComment)}
-              >Eliminar
-            </button>
-            }
+    <div className="d-flex flex-column bg-body-tertiary rounded-3 px-3 py-2 flex-grow-1">
+      <div className="d-flex justify-content-between align-items-center">
+        <strong className="small">{comment.username || "Usuario inexistente"}</strong>
+      </div>
 
-            {/* <button>Editar</button> */}
-          </div>
+      <p className="mb-1 mt-1">{comment.content}</p>
+
+      {(user?._id === comment._id || esAdmin) && (
+        <div className="d-flex justify-content-end mt-1">
+          <button
+            className="btn btn-sm btn-outline-danger py-0 px-2"
+            style={{ fontSize: "0.75rem" }}
+            onClick={() => onDelete(comment._idComment)}
+          >
+            Eliminar
+          </button>
+        </div>
+      )}
+
+      {/* <button>Editar</button> */}
+    </div>
+
         </li>
       ))}
     </ul>
